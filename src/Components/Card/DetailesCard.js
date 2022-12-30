@@ -1,6 +1,5 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext,  useState } from 'react'
 import { BiLike, BiComment } from "react-icons/bi";
-import { Link } from 'react-router-dom';
 import { ContextProvider } from '../../Pages/Context/AuthProvider';
 
 function timeStamp(time) {
@@ -19,17 +18,14 @@ function timeStamp(time) {
         return `${days} days ago`;
     }
 }
-function Card({ post, refetch }) {
+function DetailesCard({ post,  }) {
     const { user } = useContext(ContextProvider)
     const [newComment, setNewComment] = useState('')
     const [newLike, setNewLike] = useState(0)
     const [showComment, setShowComment] = useState(false)
-    const { _id, text, image, time, name, userImage,  comment, like } = post
-    let newText;
-    if(text.length < 80 ){
-        newText =  text.slice(0, 80)
-    }
+    const { _id, text, image, time, name, userImage, comment, like } = post
     
+
     const postTime = timeStamp(time)
 
     const handleCommentInput = (e) => {
@@ -50,7 +46,7 @@ function Card({ post, refetch }) {
         })
             .then(res => res.json())
             .then(data => {
-                refetch()
+                
             })
     }
     const handleAddLike = () => {
@@ -68,7 +64,6 @@ function Card({ post, refetch }) {
         })
             .then(res => res.json())
             .then(data => {
-                refetch()
             })
     }
     const handleShowComment = () => {
@@ -85,7 +80,7 @@ function Card({ post, refetch }) {
             </div>
             <div>
                 <img src={image} alt="" className="object-contain w-full mb-4 h-60 sm:h-96 dark:bg-gray-500" />
-                <p className="text-sm ">{newText}... <Link to={`/postDetailes/${_id}`} className='text-blue-600 font-lg'>Read More</Link></p>
+                <p className="text-sm ">{text}</p>
 
             </div>
             <div className="flex flex-wrap justify-between">
@@ -113,10 +108,10 @@ function Card({ post, refetch }) {
                     </div>
                 </div>
             </div>
-            <div className={`${showComment ? 'block' : 'hidden'}`}>{comment && comment.map((e, id )=> <div key={id}>
+            <p className={`${showComment ? 'block' : 'hidden'}`}>{comment && comment.map(e => <div>
                 <h4 className='text-lg font-semibold'>{e.name}</h4>
                 <span>{e.comment}</span>
-            </div>)}</div>
+            </div>)}</p>
             <div className='flex items-center left-3 bottom-5 mt-5 w-full'>
                 <input onChange={handleCommentInput} type="text" placeholder='Commemt' className='border text-sm px-2 rounded-tl-full rounded-bl-full border-black w-[75%] h-6' />
                 <button onClick={handleAddComment} className='btn bg-red-700 w-32 text-sm text-white h-6 rounded-tr-full rounded-br-full border-t-black border-b-black border-r-black border'>Commemt</button>
@@ -126,4 +121,4 @@ function Card({ post, refetch }) {
     )
 }
 
-export default Card
+export default DetailesCard
